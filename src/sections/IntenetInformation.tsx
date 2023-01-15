@@ -2,9 +2,11 @@ import { useEffect } from 'react';
 import useNotificacionStore from '../store/useNotificationStore';
 import NetInfo from '@react-native-community/netinfo';
 import Constants from 'expo-constants';
+import useAuthStore from '../store/useAuthStore';
 
 const IntenetInformation = () => {
   const { notifyError, notifySuccess } = useNotificacionStore()
+  const { API_URL } = useAuthStore()
 
   useEffect(() => {
     NetInfo.fetch().then(state => {

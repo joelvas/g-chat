@@ -1,4 +1,5 @@
-import { ApiResponse } from './../models/ErrorResponse.model'
+import { SocketResponse } from './../models/Response.model'
+import { ApiResponse } from '../models/Response.model'
 import { Channel } from './../models/Channel.model'
 import { Message } from './../models/Message.model'
 import useSocketStore from '../store/useSocketStore'
@@ -8,12 +9,46 @@ import useChatStore from '../store/useChatStore'
 const useSocketActions = () => {
   const { socket } = useSocketStore()
   const { user } = useAuthStore()
-  const { setCurrentMembers, setCurrentChannel } = useChatStore()
+  const {
+    setCurrentMembers,
+    setCurrentChannel,
+    addMessage,
+    currentChannel,
+    removeMessage
+  } = useChatStore()
 
   const createMessage = (message: Message) => {
-    socket.emit('create-message', {
+    const temporalMessage = {
+      user,
+      channel: currentChannel,
+      created_at: new Date(),
+      id: '0',
+      text: message.text
+    } as Message
+
+    const newMessage = {
       channel: message.channel.id,
       text: message.text
+    }
+    addMessage(temporalMessage)
+    socket.emit('create-message', newMessage, (payload) => {
+      removeMessage(temporalMessage)
+      if (payload.id) {
+        addMessage(payload)
+      }
+    })
+  }
+
+  const deleteMessage = (message: Message) => {
+    return new Promise((resolve, reject) => {
+      socket.emit('delete-message', message, (payload: SocketResponse) => {
+        if (payload.success) {
+          removeMessage(message)
+          resolve(payload)
+        } else {
+          reject(payload)
+        }
+      })
     })
   }
 
@@ -52,6 +87,6 @@ const useSocketActions = () => {
     })
   }
 
-  return { createMessage, joinChannel, createChannel }
+  return { createMessage, joinChannel, createChannel, deleteMessage }
 }
 export default useSocketActions

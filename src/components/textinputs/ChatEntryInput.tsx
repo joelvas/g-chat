@@ -26,6 +26,14 @@ const ChatEntryInput = () => {
     setText('')
   }
 
+  const pressSendLikeHandler = () => {
+    createMessage({
+      text: `👍`,
+      channel: currentChannel,
+    } as Message)
+    setText('')
+  }
+
   return (
     <FlexContainer style={style.container}>
       <TextInput
@@ -35,13 +43,20 @@ const ChatEntryInput = () => {
         style={[style.textInput]}
         placeholder="Write a message..."
         cursorColor={theme.colors.surface}
+        returnKeyType="send"
+        onSubmitEditing={clickSendMessageHandler}
+        keyboardType="default"
       />
-      <Button
-        style={[style.button]}
-        onPress={clickSendMessageHandler}
-      >
-        <MaterialCommunityIcons name="send-outline" size={22} />
-      </Button>
+      {text == '' ? <Button style={[style.button]}
+        onPress={pressSendLikeHandler}>
+        <MaterialCommunityIcons name="thumb-up-outline" size={22} />
+      </Button> :
+        <Button
+          style={[style.button]}
+          onPress={clickSendMessageHandler}
+        >
+          <MaterialCommunityIcons name="send-outline" size={22} />
+        </Button>}
     </FlexContainer>
   )
 }

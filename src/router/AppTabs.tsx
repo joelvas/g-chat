@@ -2,6 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import StartStacks from './StartStacks'
 import ProfileScreen from '../screens/ProfileScreen/ProfileScreen'
+import useChatStore from '../store/useChatStore'
 
 const Tab = createBottomTabNavigator()
 const AppTabs = () => {
@@ -41,7 +42,6 @@ const AppTabs = () => {
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="account" color={color} size={size} />
           ),
-          tabBarVisible: getTabBarVisibility(route)
         })}
       />
 

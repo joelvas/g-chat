@@ -16,7 +16,8 @@ const CustomTheme = {
     info: '#24AFEC',
     white: '#FFFFFF',
     onSurface: '#061A27',
-    background: '#ffffff',
+    secondaryContainer: '#F2E0F7',
+    inverseSurface: '#fff',
     outline: '#ced4da'
   }
 }

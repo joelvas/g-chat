@@ -2,7 +2,7 @@ import { Notification } from './../models/Notification.model'
 import 'react-native-get-random-values'
 import { v4 as uuidv4 } from 'uuid'
 import { NotificationStatus } from './../models/Notification.model'
-import create from 'zustand'
+import { create } from 'zustand'
 
 interface NotificacionStoreProps {
   notificacions: Notification[]

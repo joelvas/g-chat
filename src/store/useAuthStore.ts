@@ -1,4 +1,4 @@
-import create from 'zustand'
+import { create } from 'zustand'
 import { User } from '../models/User.model'
 
 export interface AuthStoreProps {
@@ -13,8 +13,10 @@ export interface AuthStoreProps {
 }
 
 const useAuthStore = create<AuthStoreProps>((set) => ({
-  API_URL: 'https://gchat-api.up.railway.app/api',
-  SOCKET_URL: 'https://gchat-api.up.railway.app',
+  // API_URL: 'https://gchat-api.up.railway.app',
+  // SOCKET_URL: 'https://gchat-api.up.railway.app',
+  API_URL: 'http://192.168.1.34:8080',
+  SOCKET_URL:'http://192.168.1.34:8080',
   token: '',
   setToken: (token: string) => {
     set((state) => {

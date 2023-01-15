@@ -3,7 +3,7 @@ import { LoginRequest, LoginResponse } from '../models/Login.model'
 import {
   ExpressValidatorResponse,
   ApiResponse
-} from '../models/ErrorResponse.model'
+} from '../models/Response.model'
 import { User } from '../models/User.model'
 import useNotificacionStore from '../store/useNotificationStore'
 
@@ -19,11 +19,14 @@ export const useLoginActions = () => {
         notifySuccess({ message: 'You logged in successfully' })
         return res.data
       })
-      .catch((err: unknown) => {
-        const error = err as AxiosError<ApiResponse>
-        notifyError({ message: error.response.data.message })
-        console.log(error.response.data)
-        return error.response.data
+      .catch((err: AxiosError<ApiResponse>) => {
+        if (err.response) {
+          notifyError({ message: err.response.data.message })
+        } else {
+          notifyError({ message: 'Error: ' + err.message })
+        }
+        console.log(err.response.data)
+        return err.response.data
       })
   }
 

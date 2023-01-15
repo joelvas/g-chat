@@ -14,7 +14,7 @@ import ChannelPasswordForm from "../../components/forms/ChannelPasswordForm"
 import useSocketActions from "../../hooks/useSocketActions"
 import { Channel } from "../../models/Channel.model"
 import useChatStore from "../../store/useChatStore"
-import { ApiResponse } from "../../models/ErrorResponse.model"
+import { ApiResponse } from "../../models/Response.model"
 
 const StartScreen = () => {
   const theme = useTheme()

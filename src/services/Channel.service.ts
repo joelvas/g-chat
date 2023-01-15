@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useState, useEffect } from 'react'
 import { Channel } from '../models/Channel.model'
-import { ApiResponse } from '../models/ErrorResponse.model'
+import { ApiResponse } from '../models/Response.model'
 import useNotificacionStore from '../store/useNotificationStore'
 
 interface GetListParams {

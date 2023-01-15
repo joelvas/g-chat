@@ -6,7 +6,7 @@ import * as Yup from 'yup'
 import { yupResolver } from "@hookform/resolvers/yup"
 import FormTextInput from "../ui/form/FormTextInput"
 import FlexItem from "../ui/flex/FlexItem"
-import { ApiResponse } from "../../models/ErrorResponse.model"
+import { ApiResponse } from "../../models/Response.model"
 
 const defaultValues = {
   password: ''

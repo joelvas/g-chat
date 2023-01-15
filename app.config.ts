@@ -1,6 +1,6 @@
 export default () => ({
   expo: {
-    name: 'g-chat',
+    name: 'Gchat',
     slug: 'GChat',
     version: '1.0.0',
     orientation: 'portrait',
@@ -16,8 +16,13 @@ export default () => ({
         foregroundImage: './assets/adaptive-icon.png',
         backgroundColor: '#FFFFFF'
       },
+      useNextNotificationsApi: true,
       package: 'com.joelvas.gchat',
       versionCode: 1
+    },
+    notification: {
+      icon: './assets/icon.png',
+      color: '#fff'
     },
     splash: {
       image: './assets/splash.png',

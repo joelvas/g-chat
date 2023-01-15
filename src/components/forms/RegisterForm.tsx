@@ -6,7 +6,7 @@ import FlexContainer from '../ui/flex/FlexContainer'
 import FormTextInput from '../ui/form/FormTextInput'
 import FlexItem from '../ui/flex/FlexItem'
 import { LoginRequest, LoginResponse } from '../../models/Login.model'
-import { ExpressValidatorResponse } from '../../models/ErrorResponse.model'
+import { ExpressValidatorResponse } from '../../models/Response.model'
 import * as Yup from 'yup'
 
 const defaultValues: LoginRequest = {

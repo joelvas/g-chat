@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, useEffect } from "react";
 import FlexContainer from "../../components/ui/flex/FlexContainer"
 import { useNavigation } from "@react-navigation/native";
 import useChatStore from "../../store/useChatStore"
@@ -7,15 +7,28 @@ import Lottie from 'lottie-react-native';
 import ChatBox from "./ChatBox";
 
 const ChatScreen = () => {
-  const { isLoadingMessages } = useChatStore()
+  const { isLoadingMessages, setIsOpenChat } = useChatStore()
 
   const navigation = useNavigation()
-  
+
+  useEffect(() => {
+    setIsOpenChat(true)
+    return () => {
+      setIsOpenChat(false)
+    }
+  }, [])
+
   useLayoutEffect(() => {
     let parentNav = navigation.getParent();
     parentNav.setOptions({
-      tabBarStyle: { display: 'flex' },
+      tabBarStyle: { display: 'none' },
     });
+
+    return () => {
+      parentNav.setOptions({
+        tabBarStyle: { display: 'flex' },
+      });
+    }
   }, [])
 
   if (isLoadingMessages) {
@@ -26,7 +39,7 @@ const ChatScreen = () => {
     )
   }
   return (
-    <FlexContainer style={{ flexGrow: 1}}>
+    <FlexContainer style={{ flexGrow: 1 }}>
       <ChatBox />
     </FlexContainer>
   )

@@ -3,6 +3,11 @@ export interface ApiResponse {
   message: string
 }
 
+export interface SocketResponse {
+  success: boolean
+  message: string
+}
+
 export interface ExpressValidatorResponse {
   errors: ExpressValidatorError[]
 }

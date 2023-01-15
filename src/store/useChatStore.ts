@@ -1,4 +1,4 @@
-import create from 'zustand'
+import { create } from 'zustand'
 import { Channel } from '../models/Channel.model'
 import { User } from '../models/User.model'
 import { Message } from '../models/Message.model'
@@ -20,8 +20,11 @@ export interface ChatStoreProps {
   addMember: (newMember: User) => void
   addMessage: (newMessage: Message) => void
   removeMember: (removedMember: User) => void
+  removeMessage: (removedMessage: Message) => void
   removeChannel: (removedChannel: Channel) => void
   updateChannel: (updatedChannel: Channel) => void
+  isOpenChat: boolean
+  setIsOpenChat: (isOpenChat: boolean) => void
 }
 const useChatStore = create<ChatStoreProps>((set) => ({
   channelsList: [],
@@ -89,6 +92,14 @@ const useChatStore = create<ChatStoreProps>((set) => ({
       return { ...state, currentMembers: newMembersList }
     })
   },
+  removeMessage: (removedMessage: Message) => {
+    set((state) => {
+      const newMessagesList = state.currentMessages.filter(
+        (m) => m.id !== removedMessage.id
+      )
+      return { ...state, currentMessages: newMessagesList }
+    })
+  },
   removeChannel: (removedChannel: Channel) => {
     set((state) => {
       const newChannelsList = state.channelsList.filter(
@@ -104,6 +115,12 @@ const useChatStore = create<ChatStoreProps>((set) => ({
         return c
       })
       return { ...state, channelsList: newChannelsList }
+    })
+  },
+  isOpenChat: false,
+  setIsOpenChat: (isOpenChat: boolean) => {
+    set((state) => {
+      return { ...state, isOpenChat }
     })
   }
 }))

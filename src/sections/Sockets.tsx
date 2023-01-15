@@ -1,12 +1,15 @@
 import { useEffect } from 'react'
 import useSocketStore from '../store/useSocketStore'
 import io from 'socket.io-client'
-import useChatStore from '../store/useChatStore'
 import useAuthStore from '../store/useAuthStore'
+import useLocalNotification from '../hooks/useLocalNotification'
+import useChatStore from '../store/useChatStore'
+import { Message } from '../models/Message.model'
 
 const SocketInit = () => {
+  const { triggerNewMessageNotification } = useLocalNotification()
   const { setSocket } = useSocketStore()
-  const { token, SOCKET_URL } = useAuthStore()
+  const { token, SOCKET_URL, user } = useAuthStore()
   const {
     setChannelsList,
     setCurrentChannel,
@@ -17,7 +20,8 @@ const SocketInit = () => {
     removeMember,
     addMessage,
     removeChannel,
-    updateChannel
+    updateChannel,
+    isOpenChat
   } = useChatStore()
 
   useEffect(() => {
@@ -57,8 +61,15 @@ const SocketInit = () => {
       removeMember(payload)
     })
 
-    socket.on('new-message', (payload) => {
+    socket.on('new-message', (payload: Message) => {
       addMessage(payload)
+      if (user.id !== payload.user.id && !isOpenChat) {
+        triggerNewMessageNotification({
+          title: `${payload.channel?.name}`,
+          subtitle: `${payload.channel?.name}`,
+          message: `${payload.user?.name}: ${payload.text}`,
+        })
+      }
     })
 
     socket.on('connect', () => {

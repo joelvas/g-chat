@@ -1,4 +1,4 @@
-import create from 'zustand'
+import { create } from 'zustand'
 import { Socket } from 'socket.io-client'
 
 export interface SocketStoreProps {
