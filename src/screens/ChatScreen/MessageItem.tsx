@@ -3,7 +3,7 @@ import FlexItem from "../../components/ui/flex/FlexItem"
 import { formatDistance, subDays } from "date-fns"
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { StyleSheet, Image, Animated } from 'react-native'
-import { Text, Card, useTheme, Button } from 'react-native-paper'
+import { Text, Card, useTheme, Button, IconButton } from 'react-native-paper'
 import { CustomThemeProps } from "../../themes/CustomTheme"
 import { Message } from "../../models/Message.model"
 import useAuthStore from "../../store/useAuthStore"
@@ -22,7 +22,7 @@ const MessageItem = ({ message }: Props) => {
   const theme = useTheme<CustomThemeProps>()
   const [messageSelected, setMessageSelected] = useState(false)
   const cardStyle = {
-    paddingHorizontal: 10,
+    paddingHorizontal: 7,
     paddingVertical: 6,
     flexShrink: 1
   }
@@ -39,15 +39,28 @@ const MessageItem = ({ message }: Props) => {
   return (
     <Card
       mode={'contained'}
-      style={{ backgroundColor: 'transparent' }}
+      style={[style.cardContainer]}
       onLongPress={() => setMessageSelected(true)}
       onPress={() => setMessageSelected(false)}>
-      <FlexContainer style={{ backgroundColor: messageSelected && messageOwner ? '#F8E0E0' : 'transparent' }}>
-        <FlexContainer style={[style.container]}>
+      <FlexContainer style={{
+        backgroundColor: messageSelected && messageOwner ? '#F8E0E0' : 'transparent',
+        paddingHorizontal: 15,
+        paddingVertical: 7
+      }}>
+        <FlexContainer style={[messageOwner ? style.rightPosition : style.leftPosition, { paddingLeft: messageOwner ? 0 : 5, paddingRight: messageOwner ? 5 : 0 }]}>
+          <Text variant="labelSmall" >{message.user.id === user.id ? 'You' : message.user.name}</Text>
+        </FlexContainer>
+        <FlexContainer style={{
+          alignItems: 'center',
+          flexDirection: 'row',
+        }}>
           {
             messageSelected && messageOwner && (
               <FlexContainer style={{
-                flexGrow: 1, flexDirection: 'row', justifyContent: 'flex-end', marginRight: 10,
+                flexGrow: 1,
+                flexDirection: 'row',
+                justifyContent: 'flex-end',
+                marginRight: 10,
                 marginVertical: 1,
               }}  >
                 <Button
@@ -59,27 +72,40 @@ const MessageItem = ({ message }: Props) => {
                   compact
                   onPress={pressDeleteHandler}
                 >
-                  {!isLoadingDelete && <MaterialCommunityIcons name="trash-can" size={22} />}
+                  {!isLoadingDelete && <MaterialCommunityIcons name="trash-can" size={18} />}
                 </Button>
               </FlexContainer>
             )
           }
           <Card
             mode={'contained'}
-            style={[cardStyle, messageOwner ? style.ownMessageCard : style.card]}
+            style={[
+              cardStyle,
+              messageOwner ? style.rightPosition : style.leftPosition,
+              messageOwner ? style.ownMessageCard : style.card
+            ]}
           >
-            <FlexContainer style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <FlexContainer style={{
+              flexDirection: 'row',
+              alignItems: 'center'
+            }}>
               {
                 !messageOwner && (
-                  <Image style={{ width: 30, height: 30, borderRadius: 15 }} source={{ uri: avatarImage }} />
+                  <Image style={{
+                    width: 30,
+                    height: 30,
+                    borderRadius: 15
+                  }} source={{ uri: avatarImage }} />
                 )
               }
               <FlexContainer style={{ marginLeft: 7 }}>
-                <Text>{message.text}</Text>
-                <Text variant="labelSmall" style={{ color: '#6c757d' }}>{distanceDate}</Text>
+                <Text textBreakStrategy="balanced">{message.text}</Text>
               </FlexContainer>
             </FlexContainer>
           </Card>
+        </FlexContainer>
+        <FlexContainer style={[messageOwner ? style.rightPosition : style.leftPosition]}>
+          <Text variant="labelSmall" style={{ color: '#6c757d', fontSize: 9 }}>{distanceDate}</Text>
         </FlexContainer>
       </FlexContainer>
     </Card>
@@ -88,11 +114,11 @@ const MessageItem = ({ message }: Props) => {
 export default MessageItem
 
 const style = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    paddingVertical: 6,
-    paddingHorizontal: 5,
+  cardContainer: {
+    backgroundColor: 'transparent'
+  },
+  flexContainer: {
+
   },
   selected: {
     shadowColor: "red",
@@ -105,13 +131,16 @@ const style = StyleSheet.create({
     elevation: 4,
   },
   card: {
-    marginRight: "auto",
     backgroundColor: 'white',
   },
-  ownMessageCard: {
+  rightPosition: {
     marginLeft: "auto",
+  },
+  leftPosition: {
+    marginRight: 'auto'
+  },
+  ownMessageCard: {
     backgroundColor: '#dde1e6'
-
   }
 })
 

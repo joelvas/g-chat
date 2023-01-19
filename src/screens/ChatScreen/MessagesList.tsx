@@ -29,7 +29,7 @@ const MessagesList = () => {
   }
 
   return (
-    <FlexContainer style={{ flexShrink: 2, paddingHorizontal: 10, position: 'relative' }}>
+    <FlexContainer style={{ flexShrink: 2, position: 'relative' }}>
       <FlatList
         ref={flatListRef}
         style={{ flexGrow: 2 }}

@@ -18,13 +18,13 @@ const useAuthentication = () => {
         const nowDate = new Date()
         if (expDate.getTime() - nowDate.getTime() > 0) {
           storeAuthentication(user, token)
-          console.log('Authenticated')
+          console.info('Authenticated')
         } else {
           await removeAuthentication()
         }
       }
     } catch (err) {
-      console.log(err)
+      console.error(err)
     }
   }
 
@@ -33,10 +33,10 @@ const useAuthentication = () => {
       await SecureStore.setItemAsync('x-token', res.token)
       await SecureStore.setItemAsync('user', JSON.stringify(res.user))
       storeAuthentication(res.user, res.token)
-      console.log('Authenticated')
+      console.info('Authenticated')
       return true
     } catch (err) {
-      console.log(err)
+      console.error(err)
     }
   }
 
@@ -45,10 +45,10 @@ const useAuthentication = () => {
       await SecureStore.deleteItemAsync('x-token')
       await SecureStore.deleteItemAsync('user')
       unstoreAuthentication()
-      console.log('Removing token...')
+      console.info('Removing token...')
       return true
     } catch (err) {
-      console.log(err)
+      console.error(err)
     }
   }
 

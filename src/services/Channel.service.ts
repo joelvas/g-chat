@@ -23,7 +23,7 @@ export const useGetChannelList = ({ text }: GetListParams) => {
       })
       .catch((err) => {
         setIsLoading(false)
-        console.log(err.response.data)
+        console.error(err.response.data)
       })
   }
 
@@ -44,7 +44,7 @@ const useChannelActions = () => {
         return res.data
       })
       .catch((err) => {
-        console.log(err.response.data.message)
+        console.error(err.response.data.message)
         notifyError({ message: err.response.data.message })
         return err.response.data
       })
@@ -56,7 +56,7 @@ const useChannelActions = () => {
         return res.data
       })
       .catch((err) => {
-        console.log(err.response.data)
+        console.error(err.response.data)
         notifyError({ message: err.response.data.message })
         return err.response.data
       })

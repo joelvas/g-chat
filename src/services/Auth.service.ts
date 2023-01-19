@@ -25,7 +25,7 @@ export const useLoginActions = () => {
         } else {
           notifyError({ message: 'Error: ' + err.message })
         }
-        console.log(err.response.data)
+        console.error(err.response.data)
         return err.response.data
       })
   }
@@ -48,7 +48,7 @@ export const useLoginActions = () => {
         } else {
           notifyError({ message: `${err.response.data}` })
         }
-        console.log(err.response.data)
+        console.error(err.response.data)
         return err.response.data
       })
   }

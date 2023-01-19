@@ -2,56 +2,68 @@ import { create } from 'zustand'
 import { Channel } from '../models/Channel.model'
 import { User } from '../models/User.model'
 import { Message } from '../models/Message.model'
+import { Subscription } from '../models/Subscription.model'
 
 export interface ChatStoreProps {
   channelsList: Channel[]
-  setChannelsList: (channelsList: Channel[]) => void
+  subscriptionsList: Subscription[]
   isLoadingChannelsList: boolean
-  setIsLoadingChannelsList: (isLoadingChannelsList: boolean) => void
   currentChannel: Channel | null
-  setCurrentChannel: (currentChannel: Channel) => void
   currentMembers: User[]
-  setCurrentMembers: (members: User[]) => void
   currentMessages: Message[]
-  setCurrentMessages: (currentMessages: Message[]) => void
   isLoadingMessages: boolean
+  isOpenChat: boolean
+  setChannelsList: (channelsList: Channel[]) => void
+  setSubscriptionsList: (subscriptionsList: Subscription[]) => void
+  setIsLoadingChannelsList: (isLoadingChannelsList: boolean) => void
+  setCurrentChannel: (currentChannel: Channel) => void
+  setCurrentMembers: (members: User[]) => void
+  setCurrentMessages: (currentMessages: Message[]) => void
   setIsLoadingMessages: (isLoadingMessages: boolean) => void
   addChannel: (newChannel: Channel) => void
   addMember: (newMember: User) => void
   addMessage: (newMessage: Message) => void
   removeMember: (removedMember: User) => void
   removeMessage: (removedMessage: Message) => void
+  updateMessageId: (updatedMessage: Message) => void
   removeChannel: (removedChannel: Channel) => void
   updateChannel: (updatedChannel: Channel) => void
-  isOpenChat: boolean
   setIsOpenChat: (isOpenChat: boolean) => void
 }
 const useChatStore = create<ChatStoreProps>((set) => ({
   channelsList: [],
+  subscriptionsList: [],
+  currentChannel: null,
+  isLoadingChannelsList: false,
+  currentMembers: [],
+  currentMessages: [],
+  isLoadingMessages: false,
+  isOpenChat: false,
   setChannelsList: (channelsList: Channel[]) => {
     set((state) => {
       return { ...state, channelsList }
     })
   },
-  currentChannel: null,
+  setSubscriptionsList: (subscriptionsList: Subscription[]) => {
+    set((state) => {
+      return { ...state, subscriptionsList }
+    })
+  },
   setCurrentChannel: (currentChannel: Channel) => {
     set((state) => {
       return { ...state, currentChannel }
     })
   },
-  isLoadingChannelsList: false,
   setIsLoadingChannelsList: (isLoadingChannelsList: boolean) => {
     set((state) => {
       return { ...state, isLoadingChannelsList }
     })
   },
-  currentMembers: [],
   setCurrentMembers: (members: User[]) => {
     set((state) => {
       return { ...state, members }
     })
   },
-  currentMessages: [],
   setCurrentMessages: (currentMessages: Message[]) => {
     set((state) => {
       return {
@@ -60,7 +72,6 @@ const useChatStore = create<ChatStoreProps>((set) => ({
       }
     })
   },
-  isLoadingMessages: false,
   setIsLoadingMessages: (isLoadingMessages: boolean) => {
     set((state) => {
       return { ...state, isLoadingMessages }
@@ -100,6 +111,15 @@ const useChatStore = create<ChatStoreProps>((set) => ({
       return { ...state, currentMessages: newMessagesList }
     })
   },
+  updateMessageId: (updatedMessage: Message) => {
+    set((state) => {
+      const newMessagesList = state.currentMessages.map((c) => {
+        if (c.id === '0') return updatedMessage
+        return c
+      })
+      return { ...state, currentMessages: newMessagesList }
+    })
+  },
   removeChannel: (removedChannel: Channel) => {
     set((state) => {
       const newChannelsList = state.channelsList.filter(
@@ -117,7 +137,6 @@ const useChatStore = create<ChatStoreProps>((set) => ({
       return { ...state, channelsList: newChannelsList }
     })
   },
-  isOpenChat: false,
   setIsOpenChat: (isOpenChat: boolean) => {
     set((state) => {
       return { ...state, isOpenChat }

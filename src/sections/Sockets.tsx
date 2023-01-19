@@ -5,6 +5,7 @@ import useAuthStore from '../store/useAuthStore'
 import useLocalNotification from '../hooks/useLocalNotification'
 import useChatStore from '../store/useChatStore'
 import { Message } from '../models/Message.model'
+import { Subscription } from '../models/Subscription.model'
 
 const SocketInit = () => {
   const { triggerNewMessageNotification } = useLocalNotification()
@@ -19,6 +20,7 @@ const SocketInit = () => {
     addMember,
     removeMember,
     addMessage,
+    setSubscriptionsList,
     removeChannel,
     updateChannel,
     isOpenChat
@@ -34,6 +36,10 @@ const SocketInit = () => {
     //sockets started
     socket.on('channels-list', (payload) => {
       setChannelsList(payload)
+    })
+
+    socket.on('subscriptions-list', (payload: Subscription[]) => {
+      setSubscriptionsList(payload)
     })
 
     socket.on('current-channel', (payload) => {
@@ -73,11 +79,11 @@ const SocketInit = () => {
     })
 
     socket.on('connect', () => {
-      console.log('Socket connected')
+      console.info('Socket connected')
     })
 
     socket.on('disconnect', () => {
-      console.log('Socket disconnected')
+      console.info('Socket disconnected')
     })
 
     setSocket(socket)

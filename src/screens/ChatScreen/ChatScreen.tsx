@@ -1,33 +1,20 @@
 import { StyleSheet } from "react-native";
-import { useLayoutEffect, useEffect } from "react";
+import { useEffect } from "react";
 import FlexContainer from "../../components/ui/flex/FlexContainer"
-import { useNavigation } from "@react-navigation/native";
 import useChatStore from "../../store/useChatStore"
 import Lottie from 'lottie-react-native';
 import ChatBox from "./ChatBox";
+import useRemoveBottomTab from "../../util/useRemoveBottomTab";
 
 const ChatScreen = () => {
   const { isLoadingMessages, setIsOpenChat } = useChatStore()
 
-  const navigation = useNavigation()
+  useRemoveBottomTab()
 
   useEffect(() => {
     setIsOpenChat(true)
     return () => {
       setIsOpenChat(false)
-    }
-  }, [])
-
-  useLayoutEffect(() => {
-    let parentNav = navigation.getParent();
-    parentNav.setOptions({
-      tabBarStyle: { display: 'none' },
-    });
-
-    return () => {
-      parentNav.setOptions({
-        tabBarStyle: { display: 'flex' },
-      });
     }
   }, [])
 

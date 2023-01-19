@@ -4,7 +4,7 @@ import { useRoute, useNavigation, RouteProp } from '@react-navigation/native'
 import { Text, useTheme, Button } from "react-native-paper"
 import { Image } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-import SearchInput from "../../components/textinputs/SearchInput"
+import SearchInput from "../../components/custom/SearchInput"
 import FlexItem from "../../components/ui/flex/FlexItem"
 import ChannelList from "./ChannelsList"
 import useAuthentication from "../../hooks/useAuthentication"

@@ -1,6 +1,4 @@
 import * as Notifications from 'expo-notifications'
-import * as Permissions from 'expo-permissions'
-
 const useLocalNotification = () => {
   const triggerNotification = async ({
     content,

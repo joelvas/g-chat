@@ -1,5 +1,4 @@
 import { SocketResponse } from './../models/Response.model'
-import { ApiResponse } from '../models/Response.model'
 import { Channel } from './../models/Channel.model'
 import { Message } from './../models/Message.model'
 import useSocketStore from '../store/useSocketStore'
@@ -14,7 +13,8 @@ const useSocketActions = () => {
     setCurrentChannel,
     addMessage,
     currentChannel,
-    removeMessage
+    removeMessage,
+    updateMessageId
   } = useChatStore()
 
   const createMessage = (message: Message) => {
@@ -31,11 +31,21 @@ const useSocketActions = () => {
       text: message.text
     }
     addMessage(temporalMessage)
-    socket.emit('create-message', newMessage, (payload) => {
-      removeMessage(temporalMessage)
-      if (payload.id) {
-        addMessage(payload)
-      }
+    return new Promise((resolve, reject) => {
+      socket.emit(
+        'create-message',
+        newMessage,
+        (payload: SocketResponse | Message) => {
+          const message = payload as Message
+          if (message.id) {
+            updateMessageId(message)
+            resolve(message)
+          } else {
+            removeMessage(message)
+            reject(payload as SocketResponse)
+          }
+        }
+      )
     })
   }
 
@@ -52,41 +62,66 @@ const useSocketActions = () => {
     })
   }
 
-  const joinChannel = (channel: Channel): Promise<ApiResponse> => {
+  const joinChannel = (channel: Channel): Promise<SocketResponse> => {
     return new Promise((resolve, reject) => {
       socket.emit('join-channel', channel, (payload) => {
         if (payload) {
           resolve({
             success: true,
             message: 'You joined channel successfully'
-          } as ApiResponse)
+          } as SocketResponse)
         } else {
           reject({
             success: false,
             message: 'Incorrect password or there was an error'
-          } as ApiResponse)
+          } as SocketResponse)
         }
       })
     })
   }
 
-  const createChannel = (channel: Channel): Promise<Channel | ApiResponse> => {
+  const createChannel = (
+    channel: Channel
+  ): Promise<Channel | SocketResponse> => {
     return new Promise((resolve, reject) => {
       socket.emit('create-channel', channel, (payload: Channel) => {
         if (payload && payload.id) {
           setCurrentChannel(payload)
-          setCurrentMembers([user])
           resolve(payload)
         } else {
           reject({
             success: false,
             message: 'There was an error'
-          } as ApiResponse)
+          } as SocketResponse)
         }
       })
     })
   }
 
-  return { createMessage, joinChannel, createChannel, deleteMessage }
+  const subscribeChannel = (channel: Channel): Promise<SocketResponse> => {
+    return new Promise((resolve, reject) => {
+      socket.emit('subscribe-channel', channel, (payload) => {
+        if (payload.success) {
+          resolve({
+            success: true,
+            message: 'You subscribed channel successfully'
+          } as SocketResponse)
+        } else {
+          reject({
+            success: false,
+            message: 'Incorrect password or there was an error'
+          } as SocketResponse)
+        }
+      })
+    })
+  }
+
+  return {
+    createMessage,
+    joinChannel,
+    createChannel,
+    deleteMessage,
+    subscribeChannel
+  }
 }
 export default useSocketActions
