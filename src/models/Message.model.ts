@@ -5,6 +5,8 @@ export interface Message {
   id: string
   text: string
   user?: User
+  user_id?: number
+  channel_id?: number
   channel?: Channel
   created_at?: Date 
 }

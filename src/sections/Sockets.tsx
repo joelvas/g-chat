@@ -6,11 +6,13 @@ import useLocalNotification from '../hooks/useLocalNotification'
 import useChatStore from '../store/useChatStore'
 import { Message } from '../models/Message.model'
 import { Subscription } from '../models/Subscription.model'
+import useStatusStore from '../store/useStatusStore'
 
 const SocketInit = () => {
   const { triggerNewMessageNotification } = useLocalNotification()
   const { setSocket } = useSocketStore()
   const { token, SOCKET_URL, user } = useAuthStore()
+  const { isOpenChat } = useStatusStore()
   const {
     setChannelsList,
     setCurrentChannel,
@@ -23,13 +25,13 @@ const SocketInit = () => {
     setSubscriptionsList,
     removeChannel,
     updateChannel,
-    isOpenChat
+
   } = useChatStore()
 
   useEffect(() => {
     const socket = io(SOCKET_URL, {
       transports: ['websocket'],
-      reconnectionAttempts: 15,
+      reconnectionAttempts: 5,
       extraHeaders: { 'x-token': token }
     })
 

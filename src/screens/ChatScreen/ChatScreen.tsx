@@ -1,13 +1,13 @@
 import { StyleSheet } from "react-native";
 import { useEffect } from "react";
 import FlexContainer from "../../components/ui/flex/FlexContainer"
-import useChatStore from "../../store/useChatStore"
+import useStatusStore from "../../store/useStatusStore"
 import Lottie from 'lottie-react-native';
 import ChatBox from "./ChatBox";
 import useRemoveBottomTab from "../../util/useRemoveBottomTab";
 
 const ChatScreen = () => {
-  const { isLoadingMessages, setIsOpenChat } = useChatStore()
+  const { isLoadingMessages, setIsOpenChat } = useStatusStore()
 
   useRemoveBottomTab()
 

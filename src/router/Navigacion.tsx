@@ -11,7 +11,7 @@ const MainNavigation = () => {
 
   return (
     <MainStack.Navigator
-      initialRouteName="Auth"
+      initialRouteName="App"
     >
       {
         !isAuthenticated ? (

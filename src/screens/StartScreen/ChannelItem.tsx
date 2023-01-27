@@ -5,6 +5,7 @@ import FlexItem from "../../components/ui/flex/FlexItem"
 import { Channel } from "../../models/Channel.model"
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import useSocketActions from "../../hooks/useSocketActions"
+import useStatusStore from "../../store/useStatusStore"
 import useChatStore from "../../store/useChatStore"
 import { useNavigation } from '@react-navigation/native'
 import { getRandomImagePlaceholder } from "../../util/defaultValues"
@@ -15,7 +16,8 @@ interface Props {
 const ChannelItem = (props: Props) => {
   const { channel } = props
   const { joinChannel } = useSocketActions()
-  const { setCurrentChannel, setIsLoadingMessages, currentChannel, subscriptionsList } = useChatStore()
+  const { setCurrentChannel, currentChannel, subscriptionsList } = useChatStore()
+  const { setIsLoadingMessages } = useStatusStore()
   const { navigate } = useNavigation()
 
   const subscribedChannel = useMemo(() => {
@@ -27,7 +29,7 @@ const ChannelItem = (props: Props) => {
   const pressItemHandler = () => {
     joinChannelHandler()
   }
-  
+
   const joinChannelHandler = async () => {
     if (channel.id === currentChannel?.id) {
       navigate('Chat' as never, {} as never)

@@ -7,19 +7,14 @@ import { Subscription } from '../models/Subscription.model'
 export interface ChatStoreProps {
   channelsList: Channel[]
   subscriptionsList: Subscription[]
-  isLoadingChannelsList: boolean
   currentChannel: Channel | null
   currentMembers: User[]
   currentMessages: Message[]
-  isLoadingMessages: boolean
-  isOpenChat: boolean
   setChannelsList: (channelsList: Channel[]) => void
   setSubscriptionsList: (subscriptionsList: Subscription[]) => void
-  setIsLoadingChannelsList: (isLoadingChannelsList: boolean) => void
   setCurrentChannel: (currentChannel: Channel) => void
   setCurrentMembers: (members: User[]) => void
   setCurrentMessages: (currentMessages: Message[]) => void
-  setIsLoadingMessages: (isLoadingMessages: boolean) => void
   addChannel: (newChannel: Channel) => void
   addMember: (newMember: User) => void
   addMessage: (newMessage: Message) => void
@@ -28,17 +23,13 @@ export interface ChatStoreProps {
   updateMessageId: (updatedMessage: Message) => void
   removeChannel: (removedChannel: Channel) => void
   updateChannel: (updatedChannel: Channel) => void
-  setIsOpenChat: (isOpenChat: boolean) => void
 }
 const useChatStore = create<ChatStoreProps>((set) => ({
   channelsList: [],
   subscriptionsList: [],
   currentChannel: null,
-  isLoadingChannelsList: false,
   currentMembers: [],
   currentMessages: [],
-  isLoadingMessages: false,
-  isOpenChat: false,
   setChannelsList: (channelsList: Channel[]) => {
     set((state) => {
       return { ...state, channelsList }
@@ -54,11 +45,6 @@ const useChatStore = create<ChatStoreProps>((set) => ({
       return { ...state, currentChannel }
     })
   },
-  setIsLoadingChannelsList: (isLoadingChannelsList: boolean) => {
-    set((state) => {
-      return { ...state, isLoadingChannelsList }
-    })
-  },
   setCurrentMembers: (members: User[]) => {
     set((state) => {
       return { ...state, members }
@@ -70,11 +56,6 @@ const useChatStore = create<ChatStoreProps>((set) => ({
         ...state,
         currentMessages: !!currentMessages ? currentMessages : []
       }
-    })
-  },
-  setIsLoadingMessages: (isLoadingMessages: boolean) => {
-    set((state) => {
-      return { ...state, isLoadingMessages }
     })
   },
   addChannel: (newChannel: Channel) => {
@@ -135,11 +116,6 @@ const useChatStore = create<ChatStoreProps>((set) => ({
         return c
       })
       return { ...state, channelsList: newChannelsList }
-    })
-  },
-  setIsOpenChat: (isOpenChat: boolean) => {
-    set((state) => {
-      return { ...state, isOpenChat }
     })
   }
 }))

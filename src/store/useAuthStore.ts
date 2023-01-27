@@ -13,8 +13,6 @@ export interface AuthStoreProps {
 }
 
 const useAuthStore = create<AuthStoreProps>((set) => ({
-  // API_URL: 'https://gchat-api.up.railway.app',
-  // SOCKET_URL: 'https://gchat-api.up.railway.app',
   API_URL: 'http://192.168.1.34:8080',
   SOCKET_URL:'http://192.168.1.34:8080',
   token: '',
