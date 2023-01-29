@@ -13,7 +13,7 @@ export interface AuthStoreProps {
 }
 
 const useAuthStore = create<AuthStoreProps>((set) => ({
-  API_URL: 'http://192.168.1.34:8080',
+  API_URL: 'http://192.168.1.34:8080/api',
   SOCKET_URL:'http://192.168.1.34:8080',
   token: '',
   setToken: (token: string) => {

@@ -8,7 +8,13 @@ import MessageItem from './MessageItem'
 import { Message } from '../../models/Message.model'
 
 const MessagesList = () => {
-  const { currentMessages } = useChatStore()
+  const { channelsList, currentChannel } = useChatStore()
+
+  const currentMessages = useMemo(() => {
+    console.log('refreshing messages...')
+    return channelsList.find((channel) => channel.id === currentChannel.id)?.messages || []
+  }, [currentChannel.id, channelsList])
+
   const flatListRef = useRef<FlatList | null>(null)
   const [scrollY, setScrollY] = useState(0);
   const [hasNewMessages, setHasNewMessages] = useState(false)
@@ -36,7 +42,7 @@ const MessagesList = () => {
         inverted
         // onScroll={onScrollHandler}
         // onContentSizeChange={contentSizeChangeHandler}
-        data={currentMessages || []}
+        data={currentMessages}
         ItemSeparatorComponent={() => <></>}
         renderItem={({ item }: ListRenderItemInfo<Message>) => (
           <MessageItem

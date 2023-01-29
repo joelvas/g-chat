@@ -4,12 +4,12 @@ import { Message } from './../models/Message.model'
 import useSocketStore from '../store/useSocketStore'
 import useAuthStore from '../store/useAuthStore'
 import useChatStore from '../store/useChatStore'
+import { v4 as uuidv4 } from 'uuid'
 
 const useSocketActions = () => {
   const { socket } = useSocketStore()
   const { user } = useAuthStore()
   const {
-    setCurrentMembers,
     setCurrentChannel,
     addMessage,
     currentChannel,
@@ -18,11 +18,12 @@ const useSocketActions = () => {
   } = useChatStore()
 
   const createMessage = (message: Message) => {
+    const temporalId = uuidv4()
     const temporalMessage = {
       user,
       channel: currentChannel,
       created_at: new Date(),
-      id: '0',
+      id: temporalId,
       text: message.text
     } as Message
 
@@ -30,18 +31,20 @@ const useSocketActions = () => {
       channel: message.channel.id,
       text: message.text
     }
-    addMessage(temporalMessage)
+    addMessage(temporalMessage, currentChannel.id)
+    console.log('sending message...')
     return new Promise((resolve, reject) => {
       socket.emit(
         'create-message',
         newMessage,
         (payload: SocketResponse | Message) => {
           const message = payload as Message
-          if (message.id) {
-            updateMessageId(message)
+          if (message?.id) {
+            updateMessageId(message, temporalId, currentChannel.id)
+            console.log({ message })
             resolve(message)
           } else {
-            removeMessage(message)
+            removeMessage(message, currentChannel.id)
             reject(payload as SocketResponse)
           }
         }
@@ -53,7 +56,7 @@ const useSocketActions = () => {
     return new Promise((resolve, reject) => {
       socket.emit('delete-message', message, (payload: SocketResponse) => {
         if (payload.success) {
-          removeMessage(message)
+          removeMessage(message, currentChannel.id)
           resolve(payload)
         } else {
           reject(payload)
@@ -64,7 +67,7 @@ const useSocketActions = () => {
 
   const joinChannel = (channel: Channel): Promise<SocketResponse> => {
     return new Promise((resolve, reject) => {
-      socket.emit('join-channel', channel, (payload) => {
+      socket.emit('join-channel', channel, (payload: Channel) => {
         if (payload) {
           resolve({
             success: true,

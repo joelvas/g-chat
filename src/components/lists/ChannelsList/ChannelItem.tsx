@@ -1,14 +1,14 @@
 import { useMemo, memo } from "react"
 import { Text, Chip } from "react-native-paper"
 import { Image, TouchableOpacity } from "react-native"
-import FlexItem from "../../components/ui/flex/FlexItem"
-import { Channel } from "../../models/Channel.model"
+import FlexItem from "../../ui/flex/FlexItem"
+import { Channel } from "../../../models/Channel.model"
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-import useSocketActions from "../../hooks/useSocketActions"
-import useStatusStore from "../../store/useStatusStore"
-import useChatStore from "../../store/useChatStore"
+import useSocketActions from "../../../hooks/useSocketActions"
+import useStatusStore from "../../../store/useStatusStore"
+import useChatStore from "../../../store/useChatStore"
 import { useNavigation } from '@react-navigation/native'
-import { getRandomImagePlaceholder } from "../../util/defaultValues"
+import { getRandomImagePlaceholder } from "../../../util/defaultValues"
 
 interface Props {
   channel: Channel

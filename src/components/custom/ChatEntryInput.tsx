@@ -22,21 +22,29 @@ const ChatEntryInput = () => {
   }
 
   const clickSendMessageHandler = async () => {
-    setText('')
-    await createMessage({
-      text: text.trim(),
-      channel: currentChannel,
-    } as Message)
+    try {
+      setText('')
+      await createMessage({
+        text: text.trim(),
+        channel: currentChannel,
+      } as Message)
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   const pressSendLikeHandler = async () => {
-    setIsSendingLike(true)
-    await createMessage({
-      text: `👍`,
-      channel: currentChannel,
-    } as Message)
-    setText('')
-    setIsSendingLike(false)
+    try {
+      setIsSendingLike(true)
+      setText('')
+      await createMessage({
+        text: `👍`,
+        channel: currentChannel,
+      } as Message)
+      setIsSendingLike(false)
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   const selectEmojiHandler = (emojiObject: EmojiType) => {

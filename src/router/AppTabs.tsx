@@ -3,6 +3,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons'
 import StartStacks from './StartStacks'
 import ProfileScreen from '../screens/ProfileScreen/ProfileScreen'
 import useChatStore from '../store/useChatStore'
+import SubscriptionsScreen from '../screens/SubscriptionsScreen'
 
 const Tab = createBottomTabNavigator()
 const AppTabs = () => {
@@ -36,13 +37,23 @@ const AppTabs = () => {
       />
 
       <Tab.Screen
+        name="Subscriptions"
+        component={SubscriptionsScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="view-list-outline" color={color} size={size} />
+          ),
+        }}
+      />
+
+      <Tab.Screen
         name="Profile"
         component={ProfileScreen}
-        options={({ route }) => ({
+        options={{
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="account" color={color} size={size} />
           ),
-        })}
+        }}
       />
 
     </Tab.Navigator>

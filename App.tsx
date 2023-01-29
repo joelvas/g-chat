@@ -9,6 +9,7 @@ import SocketInit from './src/sections/Sockets';
 import useAuthentication from './src/hooks/useAuthentication';
 import useAuthStore from './src/store/useAuthStore'
 import IntenetInformation from './src/sections/IntenetInformation';
+import SyncData from './src/sections/SyncData';
 
 export default function App() {
 
@@ -26,7 +27,7 @@ export default function App() {
     'x-token': token
   }
 
-  axios.defaults.baseURL = `${API_URL}/api`;
+  axios.defaults.baseURL = `${API_URL}`;
   axios.defaults.headers.post = defaultHeader
   axios.defaults.headers.get = defaultHeader
 
@@ -36,6 +37,7 @@ export default function App() {
         <StatusBar style="auto" />
         <IntenetInformation />
         {isAuthenticated && <SocketInit />}
+        {isAuthenticated && <SyncData />}
         <Main />
       </PaperProvider>
     </SafeAreaProvider>

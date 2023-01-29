@@ -2,29 +2,23 @@ import { useEffect } from 'react'
 import useSocketStore from '../store/useSocketStore'
 import io from 'socket.io-client'
 import useAuthStore from '../store/useAuthStore'
-import useLocalNotification from '../hooks/useLocalNotification'
 import useChatStore from '../store/useChatStore'
-import { Message } from '../models/Message.model'
+import { Channel } from '../models/Channel.model'
 import { Subscription } from '../models/Subscription.model'
 import useStatusStore from '../store/useStatusStore'
+import { v4 as uuidv4 } from 'uuid'
 
 const SocketInit = () => {
-  const { triggerNewMessageNotification } = useLocalNotification()
   const { setSocket } = useSocketStore()
   const { token, SOCKET_URL, user } = useAuthStore()
   const { isOpenChat } = useStatusStore()
   const {
     setChannelsList,
     setCurrentChannel,
-    setCurrentMessages,
-    setCurrentMembers,
     addChannel,
-    addMember,
-    removeMember,
-    addMessage,
     setSubscriptionsList,
-    removeChannel,
-    updateChannel,
+    addSubscription,
+    subscriptionsList
 
   } = useChatStore()
 
@@ -35,7 +29,6 @@ const SocketInit = () => {
       extraHeaders: { 'x-token': token }
     })
 
-    //sockets started
     socket.on('channels-list', (payload) => {
       setChannelsList(payload)
     })
@@ -44,40 +37,19 @@ const SocketInit = () => {
       setSubscriptionsList(payload)
     })
 
-    socket.on('current-channel', (payload) => {
+    socket.on('current-channel', async (payload: Channel) => {
+      const foundSub = subscriptionsList.find((sub) => sub.channel.id === payload.id ? true : false)
+      if (!foundSub) addSubscription({
+        id: uuidv4(),
+        channel: payload,
+        user: user,
+        created_at: new Date()
+      } as Subscription)
       setCurrentChannel(payload)
     })
 
-    socket.on('current-members', (payload) => {
-      setCurrentMembers(payload)
-    })
-
-    socket.on('current-messages', (payload) => {
-      setCurrentMessages(payload)
-    })
-
-    //sockets updates
     socket.on('new-channel', (payload) => {
       addChannel(payload)
-    })
-
-    socket.on('new-member', (payload) => {
-      addMember(payload)
-    })
-
-    socket.on('remove-member', (payload) => {
-      removeMember(payload)
-    })
-
-    socket.on('new-message', (payload: Message) => {
-      addMessage(payload)
-      if (user.id !== payload.user.id && !isOpenChat) {
-        triggerNewMessageNotification({
-          title: `${payload.channel?.name}`,
-          subtitle: `${payload.channel?.name}`,
-          message: `${payload.user?.name}: ${payload.text}`,
-        })
-      }
     })
 
     socket.on('connect', () => {
