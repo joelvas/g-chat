@@ -1,3 +1,13 @@
+import 'dotenv/config'
+
+export interface AppConfig {
+  API_URL: string
+  SOCKET_URL: string
+}
+
+const API_URL = process.env.API_URL
+const SOCKET_URL = process.env.SOCKET_URL
+
 export default () => ({
   expo: {
     name: 'Gchat',
@@ -9,7 +19,9 @@ export default () => ({
     extra: {
       eas: {
         projectId: 'a720a26e-b69c-4632-914a-5caa85c78ab7'
-      }
+      },
+      API_URL,
+      SOCKET_URL
     },
     android: {
       adaptiveIcon: {

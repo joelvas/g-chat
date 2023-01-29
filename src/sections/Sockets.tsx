@@ -5,13 +5,12 @@ import useAuthStore from '../store/useAuthStore'
 import useChatStore from '../store/useChatStore'
 import { Channel } from '../models/Channel.model'
 import { Subscription } from '../models/Subscription.model'
-import useStatusStore from '../store/useStatusStore'
 import { v4 as uuidv4 } from 'uuid'
+import { SOCKET_URL } from '../../config'
 
 const SocketInit = () => {
   const { setSocket } = useSocketStore()
-  const { token, SOCKET_URL, user } = useAuthStore()
-  const { isOpenChat } = useStatusStore()
+  const { token, user } = useAuthStore()
   const {
     setChannelsList,
     setCurrentChannel,

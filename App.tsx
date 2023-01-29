@@ -10,6 +10,7 @@ import useAuthentication from './src/hooks/useAuthentication';
 import useAuthStore from './src/store/useAuthStore'
 import IntenetInformation from './src/sections/IntenetInformation';
 import SyncData from './src/sections/SyncData';
+import {API_URL} from './config'
 
 export default function App() {
 
@@ -19,8 +20,7 @@ export default function App() {
     readAuthentication()
   }, [])
 
-  const { token, isAuthenticated, API_URL } = useAuthStore()
-
+  const { token, isAuthenticated } = useAuthStore()
   const defaultHeader = {
     'Content-Type': 'application/json',
     'Accept': 'application/json',

@@ -2,8 +2,6 @@ import { create } from 'zustand'
 import { User } from '../models/User.model'
 
 export interface AuthStoreProps {
-  API_URL: string
-  SOCKET_URL: string
   token: string
   setToken: (token: string) => void
   user: User | null
@@ -13,8 +11,6 @@ export interface AuthStoreProps {
 }
 
 const useAuthStore = create<AuthStoreProps>((set) => ({
-  API_URL: 'http://192.168.1.34:8080/api',
-  SOCKET_URL:'http://192.168.1.34:8080',
   token: '',
   setToken: (token: string) => {
     set((state) => {
